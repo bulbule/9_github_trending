@@ -17,15 +17,15 @@ def get_trending_repositories(top_size):
     searching_params = {'q': 'created:>={}'.format(starting_date(DAYS_AGO)),
                         'sort': 'stars'
                         }
-    r = requests.get(url, searching_params)
-    return r.json()['items'][:top_size]
+    response = requests.get(url, searching_params)
+    return response.json()['items'][:top_size]
 
 
 def get_open_issues_amount(repo_owner, repo_name):
 
     url = 'https://api.github.com/{}/{}/issues'.format(repo_owner, repo_name)
-    r = requests.get(url)
-    return len(r.json())
+    response = requests.get(url)
+    return len(response.json())
 
 
 def print_repos(repos):
