@@ -1,4 +1,4 @@
-import datetime as datetime
+import datetime
 import requests
 
 
@@ -6,7 +6,7 @@ TOP_SIZE = 20
 DAYS_AGO = 7
 
 
-def starting_date(days_ago):
+def get_starting_date(days_ago):
     today = datetime.date.today()
     starting_date = today - datetime.timedelta(days=days_ago)
     return starting_date
@@ -15,7 +15,7 @@ def starting_date(days_ago):
 def get_trending_repositories(top_size):
 
     url = 'https://api.github.com/search/repositories'
-    searching_params = {'q': 'created:>={}'.format(starting_date(DAYS_AGO)),
+    searching_params = {'q': 'created:>={}'.format(get_starting_date(DAYS_AGO)),
                         'sort': 'stars',
                         'per_page': top_size
                         }
