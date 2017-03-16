@@ -1,13 +1,14 @@
-import datetime as DT
+import datetime as datetime
 import requests
+
 
 TOP_SIZE = 20
 DAYS_AGO = 7
 
 
 def starting_date(days_ago):
-    today = DT.date.today()
-    starting_date = today - DT.timedelta(days=days_ago)
+    today = datetime.date.today()
+    starting_date = today - datetime.timedelta(days=days_ago)
     return starting_date
 
 
@@ -15,28 +16,20 @@ def get_trending_repositories(top_size):
 
     url = 'https://api.github.com/search/repositories'
     searching_params = {'q': 'created:>={}'.format(starting_date(DAYS_AGO)),
-                        'sort': 'stars'
+                        'sort': 'stars',
+                        'per_page': top_size
                         }
-    response = requests.get(url, searching_params)
-    return response.json()['items'][:top_size]
-
-
-def get_open_issues_amount(repo_owner, repo_name):
-
-    url = 'https://api.github.com/{}/{}/issues'.format(repo_owner, repo_name)
-    response = requests.get(url)
-    return len(response.json())
+    response = requests.get(url, searching_params).json()
+    return response['items']
 
 
 def print_repos(repos):
     for repo in repos:
         print(
-            'Name:{}\nurl:{}\nOpen issues:{}\n'.format(
+            'Name: {}\nurl: {}\nOpen issues: {}\n'.format(
                 repo['name'],
                 repo['url'],
-                get_open_issues_amount(
-                    repo['owner'],
-                    repo['name'])))
+                repo['open_issues']))
 
 
 if __name__ == '__main__':
